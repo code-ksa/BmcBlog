@@ -1,0 +1,247 @@
+﻿@using BMC.Foundation.Multisite.Helpers
+@using BMC.Feature.Blog.Models
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+    var direction = RtlHelper.GetDirection();
+    var siteName = ViewBag.SiteName ?? "BMC Blog";
+    var pageTitle = ViewBag.Title ?? siteName;
+}
+<!DOCTYPE html>
+<html lang="@currentLanguage" dir="@direction">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>@pageTitle - @siteName</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="@(ViewBag.Description ?? "BMC Blog - Latest news, articles and insights")" />
+    <meta name="keywords" content="@(ViewBag.Keywords ?? "blog, news, articles, BMC")" />
+    <meta name="author" content="@(ViewBag.Author ?? "BMC")" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="@pageTitle" />
+    <meta property="og:description" content="@(ViewBag.Description ?? "BMC Blog")" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@Request.Url.AbsoluteUri" />
+    <meta property="og:site_name" content="@siteName" />
+    @if (ViewBag.FeaturedImage != null)
+    {
+        <meta property="og:image" content="@ViewBag.FeaturedImage" />
+    }
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@pageTitle" />
+    <meta name="twitter:description" content="@(ViewBag.Description ?? "BMC Blog")" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/Assets/Images/favicon.ico" />
+    
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
+    
+    <!-- Custom Styles -->
+    <link href="/Assets/Styles/main.css" rel="stylesheet" />
+    
+    @if (isRtl)
+    {
+        <link href="/Assets/Styles/rtl.css" rel="stylesheet" />
+    }
+    
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        @Html.Action("Header", "Navigation", new { area = "" })
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb-section">
+        <div class="container">
+            @Html.Action("Breadcrumb", "Navigation", new { area = "" })
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main role="main" class="blog-layout">
+        <div class="container py-4">
+            <div class="row">
+                <!-- Main Content Area -->
+                <div class="col-lg-8">
+                    @RenderBody()
+
+                    <!-- Share Buttons -->
+                    <div class="share-section mt-4">
+                        <h5>@(currentLanguage == "ar" ? "شارك هذا المقال" : "Share this article")</h5>
+                        <div class="share-buttons">
+                            <a href="#" class="btn btn-primary btn-sm share-facebook" title="Share on Facebook">
+                                <i class="fab fa-facebook-f"></i> Facebook
+                            </a>
+                            <a href="#" class="btn btn-info btn-sm share-twitter" title="Share on Twitter">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="#" class="btn btn-primary btn-sm share-linkedin" title="Share on LinkedIn">
+                                <i class="fab fa-linkedin-in"></i> LinkedIn
+                            </a>
+                            <a href="#" class="btn btn-success btn-sm share-whatsapp" title="Share on WhatsApp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Author Bio Section -->
+                    @if (ViewBag.AuthorBio != null)
+                    {
+                        <div class="author-bio-section mt-5">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        @if (ViewBag.AuthorPhoto != null)
+                                        {
+                                            <img src="@ViewBag.AuthorPhoto" alt="@ViewBag.AuthorName" class="author-avatar mr-3" />
+                                        }
+                                        <div>
+                                            <h5 class="mb-2">@(currentLanguage == "ar" ? "عن الكاتب" : "About the Author")</h5>
+                                            <h6 class="text-primary mb-2">@ViewBag.AuthorName</h6>
+                                            <p class="mb-0">@ViewBag.AuthorBio</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Categories Widget -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list"></i> 
+                                @(currentLanguage == "ar" ? "التصنيفات" : "Categories")
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                @* Categories will be loaded dynamically *@
+                                <li class="mb-2">
+                                    <a href="/category/technology" class="d-flex justify-content-between align-items-center">
+                                        <span>Technology</span>
+                                        <span class="badge badge-primary badge-pill">12</span>
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="/category/business" class="d-flex justify-content-between align-items-center">
+                                        <span>Business</span>
+                                        <span class="badge badge-primary badge-pill">8</span>
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="/category/lifestyle" class="d-flex justify-content-between align-items-center">
+                                        <span>Lifestyle</span>
+                                        <span class="badge badge-primary badge-pill">15</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Recent Posts Widget -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-clock"></i> 
+                                @(currentLanguage == "ar" ? "أحدث المقالات" : "Recent Posts")
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                @* Recent posts will be loaded dynamically *@
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Widget -->
+                    <div class="mb-4">
+                        @Html.Action("Subscribe", "Newsletter", new { area = "" })
+                    </div>
+
+                    <!-- Tags Cloud Widget -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-tags"></i> 
+                                @(currentLanguage == "ar" ? "الوسوم" : "Tags")
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="tags-cloud">
+                                @* Tags will be loaded dynamically *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        @Html.Action("Footer", "Navigation", new { area = "" })
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap 4 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="/Assets/Scripts/app.js"></script>
+    
+    @RenderSection("scripts", required: false)
+
+    <style>
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .share-buttons a {
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-buttons .share-facebook { background-color: #3b5998; border-color: #3b5998; }
+        .share-buttons .share-twitter { background-color: #1da1f2; border-color: #1da1f2; }
+        .share-buttons .share-linkedin { background-color: #0077b5; border-color: #0077b5; }
+        .share-buttons .share-whatsapp { background-color: #25d366; border-color: #25d366; }
+
+        .tags-cloud a {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            background-color: #f8f9fa;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-decoration: none;
+        }
+
+        .tags-cloud a:hover {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</body>
+</html>

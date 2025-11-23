@@ -1,0 +1,144 @@
+// Header Navigation Styles
+header {
+    background-color: white;
+    @include box-shadow($box-shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: $zindex-sticky;
+}
+
+.navbar {
+    padding: 1rem 0;
+
+    .navbar-brand {
+        img {
+            @include transition(transform 0.3s ease);
+
+            &:hover {
+                @include transform(scale(1.05));
+            }
+        }
+    }
+
+    .nav-link {
+        padding: 0.5rem 1rem;
+        color: $body-color;
+        @include transition(color 0.3s ease);
+
+        &:hover {
+            color: $primary;
+        }
+
+        &.active {
+            color: $primary;
+            font-weight: 600;
+        }
+    }
+
+    .dropdown-menu {
+        border: none;
+        @include box-shadow($box-shadow);
+        border-radius: 8px;
+
+        .dropdown-item {
+            padding: 0.75rem 1.5rem;
+            @include transition($transition-base);
+
+            &:hover {
+                background-color: $light;
+                color: $primary;
+            }
+
+            &.active {
+                background-color: $primary;
+                color: white;
+            }
+        }
+    }
+}
+
+// Footer Styles
+footer {
+    background-color: $dark;
+    color: white;
+    padding: 3rem 0 1rem;
+    margin-top: 3rem;
+
+    h5 {
+        color: white;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        @include transition(color 0.3s ease);
+
+        &:hover {
+            color: white;
+        }
+    }
+
+    .list-unstyled {
+        li {
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .social-links {
+        a {
+            display: inline-block;
+            margin-right: 1rem;
+            @include transition(transform 0.3s ease);
+
+            &:hover {
+                @include transform(translateY(-3px));
+            }
+        }
+    }
+
+    hr {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+// Breadcrumb Styles
+.breadcrumb {
+    background-color: $light;
+    border-radius: 0;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+
+    a {
+        color: $primary;
+        text-decoration: none;
+        @include transition(color 0.3s ease);
+
+        &:hover {
+            color: darken($primary, 15%);
+            text-decoration: underline;
+        }
+    }
+
+    .breadcrumb-item {
+        &.active {
+            color: $secondary;
+        }
+
+        + .breadcrumb-item::before {
+            padding: 0 0.5rem;
+        }
+    }
+}
+
+// Mobile Menu
+@include respond-to(xs) {
+    .navbar-collapse {
+        background-color: white;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        @include box-shadow($box-shadow);
+    }
+}

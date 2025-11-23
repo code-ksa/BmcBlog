@@ -1,0 +1,81 @@
+// RTL-specific styles for Arabic language support
+
+[dir="rtl"] {
+    text-align: right;
+    direction: rtl;
+
+    // Typography
+    body {
+        font-family: $font-family-arabic;
+    }
+
+    // Margins and Paddings
+    .mr-1, .mx-1 { margin-right: 0 !important; margin-left: 0.25rem !important; }
+    .mr-2, .mx-2 { margin-right: 0 !important; margin-left: 0.5rem !important; }
+    .mr-3, .mx-3 { margin-right: 0 !important; margin-left: 1rem !important; }
+    .mr-4, .mx-4 { margin-right: 0 !important; margin-left: 1.5rem !important; }
+    .mr-5, .mx-5 { margin-right: 0 !important; margin-left: 3rem !important; }
+
+    .ml-1, .mx-1 { margin-left: 0 !important; margin-right: 0.25rem !important; }
+    .ml-2, .mx-2 { margin-left: 0 !important; margin-right: 0.5rem !important; }
+    .ml-3, .mx-3 { margin-left: 0 !important; margin-right: 1rem !important; }
+    .ml-4, .mx-4 { margin-left: 0 !important; margin-right: 1.5rem !important; }
+    .ml-5, .mx-5 { margin-left: 0 !important; margin-right: 3rem !important; }
+
+    .pr-1, .px-1 { padding-right: 0 !important; padding-left: 0.25rem !important; }
+    .pr-2, .px-2 { padding-right: 0 !important; padding-left: 0.5rem !important; }
+    .pr-3, .px-3 { padding-right: 0 !important; padding-left: 1rem !important; }
+    .pr-4, .px-4 { padding-right: 0 !important; padding-left: 1.5rem !important; }
+    .pr-5, .px-5 { padding-right: 0 !important; padding-left: 3rem !important; }
+
+    .pl-1, .px-1 { padding-left: 0 !important; padding-right: 0.25rem !important; }
+    .pl-2, .px-2 { padding-left: 0 !important; padding-right: 0.5rem !important; }
+    .pl-3, .px-3 { padding-left: 0 !important; padding-right: 1rem !important; }
+    .pl-4, .px-4 { padding-left: 0 !important; padding-right: 1.5rem !important; }
+    .pl-5, .px-5 { padding-left: 0 !important; padding-right: 3rem !important; }
+
+    // Text Alignment
+    .text-left { text-align: right !important; }
+    .text-right { text-align: left !important; }
+
+    // Float
+    .float-left { float: right !important; }
+    .float-right { float: left !important; }
+
+    // Navbar
+    .navbar-nav {
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+    // Breadcrumb
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "<";
+        padding-right: 0;
+        padding-left: 0.5rem;
+    }
+
+    // Dropdown
+    .dropdown-menu {
+        text-align: right;
+        left: auto !important;
+        right: 0 !important;
+    }
+
+    // Icons
+    .fa, .fas, .far, .fal, .fab {
+        margin-left: 0.5rem;
+        margin-right: 0;
+    }
+
+    // Carousel Controls
+    .carousel-control-prev {
+        right: 0;
+        left: auto;
+    }
+
+    .carousel-control-next {
+        left: 0;
+        right: auto;
+    }
+}

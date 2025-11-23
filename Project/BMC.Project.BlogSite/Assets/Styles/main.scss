@@ -1,0 +1,155 @@
+// Import Bootstrap 4 from node_modules
+@import "~bootstrap/scss/bootstrap";
+
+// Foundation Layer - Variables and Mixins
+@import "Foundation/variables";
+@import "Foundation/mixins";
+@import "Foundation/rtl";
+
+// Base Styles
+body {
+    font-family: $font-family-base;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: $primary-color;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: darken($primary-color, 15%);
+        text-decoration: none;
+    }
+}
+
+// Header Styles
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+// Hero Section
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+// Blog Card Styles
+.blog-card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    &:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+
+        a {
+            color: #333;
+
+            &:hover {
+                color: $primary-color;
+            }
+        }
+    }
+
+    .card-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+    }
+}
+
+// Sidebar Styles
+.sidebar {
+    .card {
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+    }
+}
+
+// Footer Styles
+footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 3rem 0 1rem;
+    margin-top: 3rem;
+
+    a {
+        color: rgba(255, 255, 255, 0.7);
+
+        &:hover {
+            color: #fff;
+        }
+    }
+}
+
+// Breadcrumb Styles
+.breadcrumb {
+    background-color: #f8f9fa;
+    border-radius: 0;
+    padding: 1rem 0;
+}
+
+// Comment Styles
+.comment-item {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background-color: #f8f9fa;
+}
+
+// Newsletter Widget
+.newsletter-widget {
+    .card {
+        border: 2px solid $primary-color;
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .blog-card .card-img-top {
+        height: 150px;
+    }
+
+    .hero-section {
+        margin-bottom: 1rem;
+    }
+}
+
+// Utility Classes
+.shadow-sm-hover {
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+}

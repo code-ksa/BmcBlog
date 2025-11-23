@@ -1,0 +1,76 @@
+﻿@model BMC.Feature.Comments.Models.CommentModel
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isAuthenticated = Sitecore.Context.User.IsAuthenticated;
+}
+
+<div class="comment-form">
+    @if (!isAuthenticated)
+    {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            @(currentLanguage == "ar" ? "يجب عليك تسجيل الدخول لإضافة تعليق." : "You must be logged in to add a comment.")
+            <a href="/Account/Login?returnUrl=@Request.RawUrl" class="alert-link">
+                @(currentLanguage == "ar" ? "تسجيل الدخول" : "Login")
+            </a>
+        </div>
+    }
+    else
+    {
+        @using (Html.BeginForm("Add", "Comments", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.BlogPostId)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.AuthorName, currentLanguage == "ar" ? "الاسم" : "Name", new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(m => m.AuthorName, new { @class = "form-control", placeholder = currentLanguage == "ar" ? "أدخل اسمك" : "Enter your name", required = "required" })
+                @Html.ValidationMessageFor(m => m.AuthorName, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.AuthorEmail, currentLanguage == "ar" ? "البريد الإلكتروني" : "Email", new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(m => m.AuthorEmail, new { @class = "form-control", type = "email", placeholder = currentLanguage == "ar" ? "أدخل بريدك الإلكتروني" : "Enter your email", required = "required" })
+                @Html.ValidationMessageFor(m => m.AuthorEmail, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Content, currentLanguage == "ar" ? "التعليق" : "Comment", new { @class = "font-weight-bold" })
+                @Html.TextAreaFor(m => m.Content, new { @class = "form-control", rows = "5", placeholder = currentLanguage == "ar" ? "اكتب تعليقك هنا..." : "Write your comment here...", required = "required", maxlength = "1000", id = "commentContent" })
+                @Html.ValidationMessageFor(m => m.Content, "", new { @class = "text-danger" })
+                <small class="form-text text-muted">
+                    <span id="charCount">0</span> / 1000 @(currentLanguage == "ar" ? "حرف" : "characters")
+                </small>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> @(currentLanguage == "ar" ? "إرسال التعليق" : "Submit Comment")
+                </button>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function() {
+            var commentContent = $('#commentContent');
+            var charCount = $('#charCount');
+
+            commentContent.on('input', function() {
+                var length = $(this).val().length;
+                charCount.text(length);
+
+                if (length >= 1000) {
+                    charCount.addClass('text-danger');
+                } else {
+                    charCount.removeClass('text-danger');
+                }
+            });
+        });
+    </script>
+}

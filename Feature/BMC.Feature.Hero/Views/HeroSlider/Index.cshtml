@@ -1,0 +1,151 @@
+﻿@model List<BMC.Feature.Hero.Models.HeroSlideModel>
+@using BMC.Foundation.Multisite.Helpers
+
+@{
+    var isRtl = RtlHelper.IsRtlLanguage(Sitecore.Context.Language.Name);
+    var direction = RtlHelper.GetDirection();
+    var currentLanguage = Sitecore.Context.Language.Name;
+}
+
+@if (Model != null && Model.Any())
+{
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="5000" dir="@direction">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <li data-target="#heroCarousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+            }
+        </ol>
+
+        <!-- Slides -->
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var slide = Model[i];
+                var isActive = i == 0 ? "active" : "";
+                var title = currentLanguage == "ar" ? slide.TitleAR : slide.TitleEN;
+                var description = currentLanguage == "ar" ? slide.DescriptionAR : slide.DescriptionEN;
+
+                <div class="carousel-item @isActive" style="background-image: url('@slide.BackgroundImageUrl');">
+                    <div class="carousel-overlay"></div>
+                    <div class="container">
+                        <div class="carousel-caption @(isRtl ? "text-right" : "text-left")">
+                            @if (!string.IsNullOrEmpty(title))
+                            {
+                                <h1 class="hero-title" data-animation="fadeIn@(isRtl ? "Right" : "Left")">@title</h1>
+                            }
+                            @if (!string.IsNullOrEmpty(description))
+                            {
+                                <p class="hero-description" data-animation="fadeIn@(isRtl ? "Right" : "Left")" data-delay="200">@description</p>
+                            }
+                            @if (!string.IsNullOrEmpty(slide.CTALinkUrl))
+                            {
+                                <a href="@slide.CTALinkUrl" class="btn btn-primary btn-lg hero-cta" data-animation="fadeInUp" data-delay="400">
+                                    @(string.IsNullOrEmpty(slide.CTALinkText) ? (currentLanguage == "ar" ? "اقرأ المزيد" : "Learn More") : slide.CTALinkText)
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Controls -->
+        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">@(currentLanguage == "ar" ? "السابق" : "Previous")</span>
+        </a>
+        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">@(currentLanguage == "ar" ? "التالي" : "Next")</span>
+        </a>
+    </div>
+
+    <style>
+        .carousel-item {
+            height: 600px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .carousel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-cta {
+            padding: 12px 40px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        @@media (max-width: 768px) {
+            .carousel-item {
+                height: 400px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $('#heroCarousel').on('slide.bs.carousel', function(e) {
+                var $e = $(e.relatedTarget);
+                var $animatedElements = $e.find('[data-animation]');
+                
+                $animatedElements.each(function() {
+                    var $this = $(this);
+                    var animationClass = $this.data('animation');
+                    var animationDelay = $this.data('delay') || 0;
+                    
+                    $this.css({
+                        'animation-delay': animationDelay + 'ms',
+                        'animation-name': animationClass
+                    });
+                });
+            });
+        });
+    </script>
+}

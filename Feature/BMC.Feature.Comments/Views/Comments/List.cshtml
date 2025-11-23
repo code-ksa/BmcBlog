@@ -1,0 +1,123 @@
+﻿@model BMC.Feature.Comments.Models.CommentListViewModel
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+}
+
+<div class="comments-section">
+    <h3 class="mb-4">
+        <i class="fas fa-comments"></i> 
+        @(currentLanguage == "ar" ? "التعليقات" : "Comments") 
+        <span class="badge badge-secondary">@Model.TotalComments</span>
+    </h3>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (Model.Comments != null && Model.Comments.Any())
+    {
+        <div class="comments-list">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="comment-item mb-4 p-3 border rounded @(comment.ParentComment != null ? "ml-5" : "")">
+                    <div class="comment-header d-flex justify-content-between align-items-center mb-2">
+                        <div class="comment-author">
+                            <strong>@comment.AuthorName</strong>
+                            @if (comment.ParentComment != null)
+                            {
+                                <span class="badge badge-info ml-2">@(currentLanguage == "ar" ? "رد" : "Reply")</span>
+                            }
+                        </div>
+                        <div class="comment-date text-muted">
+                            <small>@comment.PostDate.ToString("MMM dd, yyyy hh:mm tt")</small>
+                        </div>
+                    </div>
+                    <div class="comment-content">
+                        <p>@comment.Content</p>
+                    </div>
+                    @if (Model.AllowComments)
+                    {
+                        <div class="comment-actions">
+                            <button class="btn btn-sm btn-outline-primary reply-btn" 
+                                    data-comment-id="@comment.CommentId" 
+                                    data-post-id="@comment.BlogPostId">
+                                <i class="fas fa-reply"></i> @(currentLanguage == "ar" ? "رد" : "Reply")
+                            </button>
+                        </div>
+
+                        <div class="reply-form-container mt-3" id="reply-form-@comment.CommentId" style="display: none;">
+                            @Html.Partial("Add", new BMC.Feature.Comments.Models.CommentModel { BlogPostId = comment.BlogPostId })
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> 
+            @(currentLanguage == "ar" ? "لا توجد تعليقات حتى الآن. كن أول من يعلق!" : "No comments yet. Be the first to comment!")
+        </div>
+    }
+
+    @if (Model.AllowComments)
+    {
+        <div class="add-comment-section mt-5">
+            <h4>@(currentLanguage == "ar" ? "أضف تعليقك" : "Add Your Comment")</h4>
+            @Html.Action("Add", "Comments", new { postId = Sitecore.Context.Item.ID.ToString() })
+        </div>
+    }
+</div>
+
+<style>
+    .comments-section {
+        margin-top: 3rem;
+    }
+
+    .comment-item {
+        background-color: #f8f9fa;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .comment-item:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-author strong {
+        color: #007bff;
+    }
+
+    .comment-content p {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.reply-btn').click(function() {
+                var commentId = $(this).data('comment-id');
+                $('#reply-form-' + commentId).toggle();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,171 @@
+﻿@model BMC.Feature.Hero.Models.HeroSlideModel
+@using BMC.Foundation.Multisite.Helpers
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+    var title = currentLanguage == "ar" ? Model.TitleAR : Model.TitleEN;
+    var description = currentLanguage == "ar" ? Model.DescriptionAR : Model.DescriptionEN;
+}
+
+<div class="hero-slide" style="background-image: url('@Model.BackgroundImageUrl');">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="hero-content @(isRtl ? "text-right" : "text-left")">
+            @if (!string.IsNullOrEmpty(title))
+            {
+                <h1 class="hero-title" data-animation="fadeIn@(isRtl ? "Right" : "Left")">
+                    @title
+                </h1>
+            }
+            
+            @if (!string.IsNullOrEmpty(description))
+            {
+                <p class="hero-description" data-animation="fadeIn@(isRtl ? "Right" : "Left")" data-delay="200">
+                    @description
+                </p>
+            }
+            
+            @if (!string.IsNullOrEmpty(Model.CTALinkUrl))
+            {
+                <a href="@Model.CTALinkUrl" class="btn btn-primary btn-lg hero-cta" data-animation="fadeInUp" data-delay="400">
+                    @if (!string.IsNullOrEmpty(Model.CTALinkText))
+                    {
+                        @Model.CTALinkText
+                    }
+                    else
+                    {
+                        @(currentLanguage == "ar" ? "اقرأ المزيد" : "Learn More")
+                    }
+                    <i class="fas fa-arrow-@(isRtl ? "left" : "right") ml-2"></i>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .hero-slide {
+        position: relative;
+        height: 600px;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        max-width: 700px;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        line-height: 1.2;
+    }
+
+    .hero-description {
+        font-size: 1.25rem;
+        color: white;
+        margin-bottom: 2rem;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        line-height: 1.6;
+    }
+
+    .hero-cta {
+        padding: 12px 40px;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .hero-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .hero-slide {
+            height: 400px;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+        }
+
+        .hero-cta {
+            font-size: 1rem;
+            padding: 10px 30px;
+        }
+    }
+
+    /* RTL Specific Styles */
+    [dir="rtl"] .hero-content {
+        text-align: right !important;
+    }
+
+    [dir="rtl"] .hero-cta .ml-2 {
+        margin-left: 0 !important;
+        margin-right: 0.5rem;
+    }
+
+    /* Animation Classes */
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    [data-animation] {
+        animation-duration: 0.8s;
+        animation-fill-mode: both;
+    }
+</style>

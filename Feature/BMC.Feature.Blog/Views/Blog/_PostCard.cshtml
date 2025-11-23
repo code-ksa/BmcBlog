@@ -1,0 +1,139 @@
+﻿@model BMC.Feature.Blog.Models.BlogPostModel
+@using BMC.Foundation.Multisite.Helpers
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+}
+
+<article class="blog-card card h-100 shadow-sm">
+    @if (!string.IsNullOrEmpty(Model.FeaturedImageUrl))
+    {
+        <div class="card-img-wrapper">
+            <img src="@Model.FeaturedImageUrl" class="card-img-top" alt="@Model.Title" loading="lazy" />
+            @if (Model.Category != null)
+            {
+                <span class="category-badge">@Model.Category.DisplayName</span>
+            }
+        </div>
+    }
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title">
+            <a href="@Model.Url" class="stretched-link">@Model.Title</a>
+        </h5>
+        
+        <div class="post-meta text-muted small mb-3">
+            <span class="meta-item">
+                <i class="far fa-calendar"></i> 
+                @Model.PublishDate.ToString("MMM dd, yyyy")
+            </span>
+            @if (Model.Author != null)
+            {
+                <span class="meta-item">
+                    <i class="far fa-user"></i> 
+                    @Model.Author.DisplayName
+                </span>
+            }
+            <span class="meta-item">
+                <i class="far fa-eye"></i> 
+                @Model.ViewCount @(currentLanguage == "ar" ? "مشاهدة" : "views")
+            </span>
+        </div>
+
+        <p class="card-text flex-grow-1">
+            @if (Model.Summary.Length > 150)
+            {
+                @Model.Summary.Substring(0, 150)<text>...</text>
+            }
+            else
+            {
+                @Model.Summary
+            }
+        </p>
+
+        <div class="post-footer mt-auto">
+            @if (Model.Tags != null && Model.Tags.Any())
+            {
+                <div class="post-tags mb-2">
+                    @foreach (var tag in Model.Tags.Take(3))
+                    {
+                        <span class="badge badge-secondary">@tag.DisplayName</span>
+                    }
+                </div>
+            }
+
+            <a href="@Model.Url" class="btn btn-outline-primary btn-sm">
+                @(currentLanguage == "ar" ? "اقرأ المزيد" : "Read More")
+                <i class="fas fa-arrow-@(isRtl ? "left" : "right")"></i>
+            </a>
+        </div>
+    </div>
+</article>
+
+<style>
+    .blog-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+        overflow: hidden;
+        border: none;
+    }
+
+    .blog-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card-img-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .blog-card .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .blog-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .category-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #007bff;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .blog-card .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .blog-card .card-title a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .blog-card .card-title a:hover {
+        color: #007bff;
+    }
+
+    .post-meta .meta-item {
+        margin-right: 1rem;
+        display: inline-block;
+    }
+
+    .post-tags .badge {
+        margin-right: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: normal;
+    }
+</style>

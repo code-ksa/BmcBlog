@@ -1,0 +1,100 @@
+@model BMC.Feature.Newsletter.Models.NewsletterSubscriptionModel
+
+<div class="newsletter-widget">
+    <div class="card border-primary">
+        <div class="card-body">
+            <h5 class="card-title text-primary">
+                <i class="fas fa-envelope"></i> Subscribe to Newsletter
+            </h5>
+            <p class="card-text small">Get the latest blog posts delivered to your inbox.</p>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <small>@TempData["SuccessMessage"]</small>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <small>@TempData["ErrorMessage"]</small>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            @using (Html.BeginForm("Subscribe", "Newsletter", FormMethod.Post, new { @class = "newsletter-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger small" })
+
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-sm", placeholder = "Your name (optional)" })
+                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="form-group">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-sm", placeholder = "Enter your email", type = "email", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                </div>
+
+                <div class="form-group form-check">
+                    @Html.CheckBoxFor(m => m.AcceptTerms, new { @class = "form-check-input", required = "required" })
+                    @Html.LabelFor(m => m.AcceptTerms, new { @class = "form-check-label small" })
+                    @Html.ValidationMessageFor(m => m.AcceptTerms, "", new { @class = "text-danger small d-block" })
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-sm">
+                    <i class="fas fa-paper-plane"></i> Subscribe
+                </button>
+            }
+
+            <p class="text-muted small mt-3 mb-0">
+                We respect your privacy. <a href="/privacy-policy">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .newsletter-widget {
+        margin-bottom: 2rem;
+    }
+
+    .newsletter-widget .card {
+        border-width: 2px;
+    }
+
+    .newsletter-widget .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .newsletter-widget .form-control-sm {
+        font-size: 0.875rem;
+    }
+
+    .newsletter-widget .btn-sm {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .newsletter-widget .alert {
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .newsletter-widget .form-check-label {
+        margin-left: 0.25rem;
+    }
+</style>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

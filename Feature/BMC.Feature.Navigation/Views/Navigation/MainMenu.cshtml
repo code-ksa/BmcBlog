@@ -1,0 +1,143 @@
+@model List<BMC.Feature.Navigation.Models.NavigationItemModel>
+@using BMC.Foundation.Multisite.Helpers
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+}
+
+@if (Model != null && Model.Any())
+{
+    <ul class="navbar-nav @(isRtl ? "mr-auto" : "ml-auto")">
+        @foreach (var item in Model)
+        {
+            if (item.Children != null && item.Children.Any())
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle @(item.IsActive ? "active" : "")" 
+                       href="@item.Url" 
+                       id="navbarDropdown_@item.Title.Replace(" ", "_")" 
+                       role="button" 
+                       data-toggle="dropdown" 
+                       aria-haspopup="true" 
+                       aria-expanded="false">
+                        @item.Title
+                    </a>
+                    <div class="dropdown-menu @(isRtl ? "dropdown-menu-right" : "")" 
+                         aria-labelledby="navbarDropdown_@item.Title.Replace(" ", "_")">
+                        @foreach (var child in item.Children)
+                        {
+                            if (child.Children != null && child.Children.Any())
+                            {
+                                <div class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle @(child.IsActive ? "active" : "")" 
+                                       href="@child.Url">
+                                        @child.Title
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        @foreach (var subChild in child.Children)
+                                        {
+                                            <a class="dropdown-item @(subChild.IsActive ? "active" : "")" 
+                                               href="@subChild.Url">
+                                                @subChild.Title
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <a class="dropdown-item @(child.IsActive ? "active" : "")" 
+                                   href="@child.Url">
+                                    @child.Title
+                                </a>
+                            }
+                        }
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link @(item.IsActive ? "active" : "")" 
+                       href="@item.Url">
+                        @item.Title
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+}
+
+<style>
+    .nav-link {
+        padding: 0.5rem 1rem;
+        color: #333;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #007bff;
+    }
+
+    .nav-link.active {
+        color: #007bff;
+        font-weight: 600;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #007bff;
+    }
+
+    .dropdown-item.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu > .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -6px;
+        margin-left: -1px;
+    }
+
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-submenu > .dropdown-toggle::after {
+        display: inline-block;
+        margin-left: 0.5rem;
+        vertical-align: 0.255em;
+        content: "";
+        border-top: 0.3em solid transparent;
+        border-right: 0;
+        border-bottom: 0.3em solid transparent;
+        border-left: 0.3em solid;
+    }
+
+    @media (max-width: 991px) {
+        .dropdown-submenu > .dropdown-menu {
+            position: static;
+            margin-left: 1rem;
+            box-shadow: none;
+        }
+    }
+</style>

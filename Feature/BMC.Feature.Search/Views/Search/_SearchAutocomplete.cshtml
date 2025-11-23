@@ -1,0 +1,239 @@
+﻿@model List<BMC.Feature.Search.Models.SearchResultItemModel>
+@using BMC.Foundation.Multisite.Helpers
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+}
+
+<div class="search-autocomplete-dropdown" dir="@(isRtl ? "rtl" : "ltr")">
+    @if (Model != null && Model.Any())
+    {
+        <div class="autocomplete-results">
+            @foreach (var result in Model)
+            {
+                <a href="@result.Url" class="autocomplete-item">
+                    <div class="item-content">
+                        <div class="item-title">
+                            @HighlightSearchTerm(result.Title, ViewBag.SearchQuery as string)
+                        </div>
+                        @if (!string.IsNullOrEmpty(result.Summary))
+                        {
+                            <div class="item-snippet">
+                                @HighlightSearchTerm(TruncateText(result.Summary, 80), ViewBag.SearchQuery as string)
+                            </div>
+                        }
+                        <div class="item-meta">
+                            @if (!string.IsNullOrEmpty(result.CategoryName))
+                            {
+                                <span class="meta-category">
+                                    <i class="fas fa-folder"></i> @result.CategoryName
+                                </span>
+                            }
+                            @if (result.PublishDate != DateTime.MinValue)
+                            {
+                                <span class="meta-date">
+                                    <i class="far fa-calendar"></i> @result.PublishDate.ToString("MMM dd, yyyy")
+                                </span>
+                            }
+                        </div>
+                    </div>
+                    <div class="item-icon">
+                        <i class="fas fa-chevron-@(isRtl ? "left" : "right")"></i>
+                    </div>
+                </a>
+            }
+        </div>
+        
+        <div class="autocomplete-footer">
+            <a href="/search?q=@ViewBag.SearchQuery" class="view-all-link">
+                @(currentLanguage == "ar" ? "عرض جميع النتائج" : "View all results")
+                <i class="fas fa-arrow-@(isRtl ? "left" : "right") ml-1"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="no-results">
+            <i class="fas fa-search"></i>
+            <p>@(currentLanguage == "ar" ? "لا توجد نتائج" : "No results found")</p>
+        </div>
+    }
+</div>
+
+@functions {
+    private string TruncateText(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
+            return text;
+        
+        return text.Substring(0, maxLength) + "...";
+    }
+
+    private IHtmlString HighlightSearchTerm(string text, string searchQuery)
+    {
+        if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(searchQuery))
+            return new HtmlString(text);
+
+        var highlightedText = System.Text.RegularExpressions.Regex.Replace(
+            text,
+            searchQuery,
+            match => $"<mark>{match.Value}</mark>",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase
+        );
+
+        return new HtmlString(highlightedText);
+    }
+}
+
+<style>
+    .search-autocomplete-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        max-height: 400px;
+        overflow-y: auto;
+        z-index: 1000;
+        margin-top: 2px;
+    }
+
+    .autocomplete-results {
+        padding: 0;
+    }
+
+    .autocomplete-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid #f8f9fa;
+        text-decoration: none;
+        color: #333;
+        transition: background-color 0.3s ease;
+    }
+
+    .autocomplete-item:hover {
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .autocomplete-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-content {
+        flex: 1;
+    }
+
+    .item-title {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .item-snippet {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+        line-height: 1.4;
+    }
+
+    .item-meta {
+        font-size: 0.75rem;
+        color: #6c757d;
+    }
+
+    .item-meta span {
+        margin-right: 1rem;
+        display: inline-block;
+    }
+
+    .item-icon {
+        color: #dee2e6;
+        font-size: 1.25rem;
+        margin-left: 1rem;
+    }
+
+    .autocomplete-item:hover .item-icon {
+        color: #007bff;
+    }
+
+    .autocomplete-footer {
+        padding: 1rem;
+        border-top: 1px solid #dee2e6;
+        background-color: #f8f9fa;
+        text-align: center;
+    }
+
+    .view-all-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: color 0.3s ease;
+    }
+
+    .view-all-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    .no-results {
+        padding: 2rem;
+        text-align: center;
+        color: #6c757d;
+    }
+
+    .no-results i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .no-results p {
+        margin: 0;
+        font-size: 0.875rem;
+    }
+
+    mark {
+        background-color: #ffeb3b;
+        padding: 0 0.25rem;
+        font-weight: 600;
+    }
+
+    /* RTL Specific Styles */
+    [dir="rtl"] .item-meta span {
+        margin-right: 0;
+        margin-left: 1rem;
+    }
+
+    [dir="rtl"] .item-icon {
+        margin-left: 0;
+        margin-right: 1rem;
+    }
+
+    /* Scrollbar Styling */
+    .search-autocomplete-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .search-autocomplete-dropdown::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .search-autocomplete-dropdown::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+
+    .search-autocomplete-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>

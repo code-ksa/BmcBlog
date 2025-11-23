@@ -1,0 +1,89 @@
+// RTL Mixin
+@mixin rtl {
+    [dir="rtl"] & {
+        @content;
+    }
+}
+
+// Responsive Mixins
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == xs {
+        @media (max-width: 575px) { @content; }
+    }
+    @else if $breakpoint == sm {
+        @media (min-width: 576px) { @content; }
+    }
+    @else if $breakpoint == md {
+        @media (min-width: 768px) { @content; }
+    }
+    @else if $breakpoint == lg {
+        @media (min-width: 992px) { @content; }
+    }
+    @else if $breakpoint == xl {
+        @media (min-width: 1200px) { @content; }
+    }
+}
+
+// Text Truncate
+@mixin text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// Clearfix
+@mixin clearfix {
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+// Box Shadow
+@mixin box-shadow($shadow) {
+    -webkit-box-shadow: $shadow;
+    -moz-box-shadow: $shadow;
+    box-shadow: $shadow;
+}
+
+// Transition
+@mixin transition($transition...) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+}
+
+// Transform
+@mixin transform($transforms) {
+    -webkit-transform: $transforms;
+    -moz-transform: $transforms;
+    -ms-transform: $transforms;
+    transform: $transforms;
+}
+
+// Center element
+@mixin center-element {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include transform(translate(-50%, -50%));
+}
+
+// Flex center
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// Aspect ratio
+@mixin aspect-ratio($width, $height) {
+    position: relative;
+    &::before {
+        content: "";
+        display: block;
+        padding-top: ($height / $width) * 100%;
+    }
+}

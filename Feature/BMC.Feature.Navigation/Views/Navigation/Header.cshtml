@@ -1,0 +1,101 @@
+﻿@model List<BMC.Feature.Navigation.Models.NavigationItemModel>
+@using BMC.Foundation.Multisite.Helpers
+@using BMC.Foundation.Multisite.Providers
+
+@{
+    var languageResolver = new LanguageResolver();
+    var currentLanguage = languageResolver.GetCurrentLanguage().Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+    var direction = RtlHelper.GetDirection();
+}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" dir="@direction">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="/images/logo.png" alt="BMC" height="40" />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav @(isRtl ? "mr-auto" : "ml-auto")">
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                        if (item.Children != null && item.Children.Any())
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle @(item.IsActive ? "active" : "")" href="@item.Url" id="navbarDropdown_@item.Title" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @item.Title
+                                </a>
+                                <div class="dropdown-menu @(isRtl ? "dropdown-menu-right" : "")" aria-labelledby="navbarDropdown_@item.Title">
+                                    @foreach (var child in item.Children)
+                                    {
+                                        <a class="dropdown-item @(child.IsActive ? "active" : "")" href="@child.Url">@child.Title</a>
+                                    }
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(item.IsActive ? "active" : "")" href="@item.Url">@item.Title</a>
+                            </li>
+                        }
+                    }
+                }
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-globe"></i> @(currentLanguage.ToUpper())
+                    </a>
+                    <div class="dropdown-menu @(isRtl ? "dropdown-menu-right" : "dropdown-menu-left")" aria-labelledby="languageDropdown">
+                        <a class="dropdown-item @(currentLanguage == "en" ? "active" : "")" href="?sc_lang=en">English</a>
+                        <a class="dropdown-item @(currentLanguage == "ar" ? "active" : "")" href="?sc_lang=ar">العربية</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar {
+        padding: 1rem 0;
+    }
+
+    .navbar-brand img {
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-brand:hover img {
+        transform: scale(1.05);
+    }
+
+    .nav-link {
+        padding: 0.5rem 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+        color: #007bff;
+    }
+
+    .nav-link.active {
+        color: #007bff;
+        font-weight: 600;
+    }
+
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-item.active {
+        background-color: #007bff;
+        color: #fff;
+    }
+</style>

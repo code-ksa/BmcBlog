@@ -1,0 +1,175 @@
+@model List<BMC.Feature.Navigation.Models.NavigationItemModel>
+@using BMC.Foundation.Multisite.Helpers
+
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+}
+
+<div class="mobile-menu d-lg-none">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobileNavbar" aria-controls="mobileNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mobileNavbar">
+        @if (Model != null && Model.Any())
+        {
+            <ul class="navbar-nav">
+                @foreach (var item in Model)
+                {
+                    <li class="nav-item @(item.Children != null && item.Children.Any() ? "has-children" : "")">
+                        <a class="nav-link @(item.IsActive ? "active" : "")" 
+                           href="@item.Url">
+                            @item.Title
+                            @if (item.Children != null && item.Children.Any())
+                            {
+                                <i class="fas fa-chevron-@(isRtl ? "left" : "right") float-@(isRtl ? "left" : "right") toggle-icon"></i>
+                            }
+                        </a>
+
+                        @if (item.Children != null && item.Children.Any())
+                        {
+                            <ul class="submenu">
+                                @foreach (var child in item.Children)
+                                {
+                                    <li class="nav-item @(child.Children != null && child.Children.Any() ? "has-children" : "")">
+                                        <a class="nav-link @(child.IsActive ? "active" : "")" 
+                                           href="@child.Url">
+                                            @child.Title
+                                            @if (child.Children != null && child.Children.Any())
+                                            {
+                                                <i class="fas fa-chevron-@(isRtl ? "left" : "right") float-@(isRtl ? "left" : "right") toggle-icon"></i>
+                                            }
+                                        </a>
+
+                                        @if (child.Children != null && child.Children.Any())
+                                        {
+                                            <ul class="submenu">
+                                                @foreach (var subChild in child.Children)
+                                                {
+                                                    <li class="nav-item">
+                                                        <a class="nav-link @(subChild.IsActive ? "active" : "")" 
+                                                           href="@subChild.Url">
+                                                            @subChild.Title
+                                                        </a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+<style>
+    .mobile-menu .navbar-toggler {
+        border: none;
+        padding: 0.75rem;
+        background-color: transparent;
+    }
+
+    .mobile-menu .navbar-toggler-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .mobile-menu .navbar-collapse {
+        background-color: white;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .mobile-menu .nav-item {
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .mobile-menu .nav-link {
+        padding: 1rem;
+        color: #333;
+        font-size: 1rem;
+        display: block;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .mobile-menu .nav-link:hover,
+    .mobile-menu .nav-link.active {
+        background-color: #f8f9fa;
+        color: #007bff;
+    }
+
+    .mobile-menu .submenu {
+        list-style: none;
+        padding-left: 0;
+        display: none;
+        background-color: #f8f9fa;
+        margin: 0;
+    }
+
+    .mobile-menu .submenu .nav-link {
+        padding-left: 2rem;
+        font-size: 0.9rem;
+    }
+
+    .mobile-menu .submenu .submenu .nav-link {
+        padding-left: 3rem;
+        font-size: 0.85rem;
+    }
+
+    .mobile-menu .has-children > .nav-link {
+        cursor: pointer;
+    }
+
+    .mobile-menu .toggle-icon {
+        transition: transform 0.3s ease;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .mobile-menu .has-children.open > .nav-link .toggle-icon {
+        transform: rotate(90deg);
+    }
+
+    .mobile-menu .has-children.open > .submenu {
+        display: block;
+    }
+
+    /* Touch-friendly spacing */
+    .mobile-menu .nav-item {
+        min-height: 48px;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        $('.mobile-menu .has-children > .nav-link').on('click', function(e) {
+            e.preventDefault();
+            var parent = $(this).parent();
+            parent.toggleClass('open');
+            parent.siblings().removeClass('open');
+        });
+
+        // Close mobile menu when clicking outside
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.mobile-menu').length) {
+                $('#mobileNavbar').collapse('hide');
+            }
+        });
+
+        // Close submenu when navigating
+        $('.mobile-menu .nav-link:not(.has-children > .nav-link)').on('click', function() {
+            $('#mobileNavbar').collapse('hide');
+        });
+    });
+</script>
