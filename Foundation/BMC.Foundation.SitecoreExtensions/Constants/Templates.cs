@@ -33,5 +33,43 @@ namespace BMC.Foundation.SitecoreExtensions.Constants
         {
             public static readonly ID TemplateId = new ID("{D9E0F1A2-B3C4-5678-4567-890123456789}");
         }
+
+        public static class Site
+        {
+            public static readonly ID TemplateId = new ID("{F2FD4169-6FF9-4A5B-826C-63A2F091E91E}");
+
+            public static class Fields
+            {
+                public static readonly ID SiteMediaLibrary = new ID("{B1A2C3D4-E5F6-7890-ABCD-EF1234567890}");
+            }
+        }
+
+        public static class BlogRoot
+        {
+            public static readonly ID TemplateId = new ID("{E1F2A3B4-C5D6-7890-ABCD-EF1234567890}");
+        }
+
+        public static class Category
+        {
+            public static readonly ID TemplateId = new ID("{C1D2E3F4-A5B6-7890-ABCD-EF1234567890}");
+
+            public static class Fields
+            {
+                public static readonly ID CategoryName = new ID("{D2E3F4A5-B6C7-8901-BCDE-F12345678901}");
+                public static readonly ID CategoryDescription = new ID("{E3F4A5B6-C7D8-9012-CDEF-123456789012}");
+            }
+        }
+
+        public static class Author
+        {
+            public static readonly ID TemplateId = new ID("{F4A5B6C7-D8E9-0123-DEF1-234567890123}");
+
+            public static class Fields
+            {
+                public static readonly ID AuthorName = new ID("{A5B6C7D8-E9F0-1234-EF12-345678901234}");
+                public static readonly ID Biography = new ID("{B6C7D8E9-F0A1-2345-F123-456789012345}");
+                public static readonly ID ProfileImage = new ID("{C7D8E9F0-A1B2-3456-1234-567890123456}");
+            }
+        }
     }
 }
