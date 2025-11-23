@@ -125,12 +125,14 @@
     <Content Include="Assets\Styles\Foundation\_mixins.scss" />
     <Content Include="Assets\Styles\Foundation\_variables.scss" />
     <Content Include="package.json" />
-    <Content Include="App_Config\Include\Project\z.DisableIdentityServer.config" />
-    <Content Include="App_Config\Include\Project\z.DisableOwinIdentityServer.config" />
+    <Content Include="App_Config\Include\Project\001.FederatedAuthDisabled.config" />
+    <Content Include="App_Config\Include\Project\z.BMC.DisableIdentityServer.config" />
+    <Content Include="App_Config\Include\Project\z.BMC.DisableSXA.config" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Layouts\Default.cshtml" />
     <Content Include="Views\Layouts\BlogLayout.cshtml" />
+    <Content Include="Views\Layouts\SitecoreLayout.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

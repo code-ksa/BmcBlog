@@ -1,0 +1,4 @@
+[33mab48a58[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #1 from code-ksa/claude/align-bmc-blog-project-013kV1hogPMSLUbjRwgtGLKR
+[33mc85c2ba[m Align BMC Blog project with Sitecore site configuration
+[33mbf953f5[m Add project files.
+[33mfd64080[m Add .gitattributes and .gitignore.

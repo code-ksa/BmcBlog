@@ -1,0 +1,78 @@
+@using Sitecore.Mvc
+@using BMC.Foundation.Multisite.Helpers
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var isRtl = RtlHelper.IsRtlLanguage(currentLanguage);
+    var direction = RtlHelper.GetDirection();
+    var siteName = Sitecore.Context.Site.SiteInfo.Properties["browserTitle"] ?? "BMC Blog";
+    var pageTitle = Sitecore.Context.Item["Title"] ?? Sitecore.Context.Item.DisplayName;
+}
+<!DOCTYPE html>
+<html lang="@currentLanguage" dir="@direction">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>@pageTitle - @siteName</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="@(Sitecore.Context.Item["Meta Description"] ?? "BMC Blog - Latest news, articles and insights")" />
+    <meta name="keywords" content="@(Sitecore.Context.Item["Meta Keywords"] ?? "blog, news, articles, BMC")" />
+    <meta name="author" content="BMC" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="@pageTitle" />
+    <meta property="og:description" content="@(Sitecore.Context.Item["Meta Description"] ?? "BMC Blog")" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@Request.Url.AbsoluteUri" />
+    <meta property="og:site_name" content="@siteName" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@pageTitle" />
+    <meta name="twitter:description" content="@(Sitecore.Context.Item["Meta Description"] ?? "BMC Blog")" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/Assets/Images/favicon.ico" />
+    
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
+    
+    <!-- Custom Styles -->
+    <link href="/Assets/Styles/main.css" rel="stylesheet" />
+    
+    @if (isRtl)
+    {
+        <link href="/Assets/Styles/rtl.css" rel="stylesheet" />
+    }
+    
+    @Html.Sitecore().Placeholder("head-scripts")
+</head>
+<body>
+    <!-- Header Navigation -->
+    @Html.Sitecore().Placeholder("header")
+
+    <!-- Main Content -->
+    <main role="main">
+        @Html.Sitecore().Placeholder("main")
+    </main>
+
+    <!-- Footer -->
+    @Html.Sitecore().Placeholder("footer")
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap 4 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="/Assets/Scripts/app.js"></script>
+    
+    @Html.Sitecore().Placeholder("footer-scripts")
+</body>
+</html>
