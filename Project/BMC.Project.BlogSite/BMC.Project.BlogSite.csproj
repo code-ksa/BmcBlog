@@ -126,6 +126,7 @@
     <Content Include="Assets\Styles\Foundation\_variables.scss" />
     <Content Include="package.json" />
     <Content Include="App_Config\Include\Project\z.DisableIdentityServer.config" />
+    <Content Include="App_Config\Include\Project\z.DisableOwinIdentityServer.config" />
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Layouts\Default.cshtml" />
