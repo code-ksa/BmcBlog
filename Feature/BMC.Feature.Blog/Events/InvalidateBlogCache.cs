@@ -94,7 +94,7 @@ namespace BMC.Feature.Blog.Events
             try
             {
                 // Clear the main blog cache
-                var blogCache = Sitecore.Caching.CacheManager.FindCacheByName("BMC.Blog.Cache");
+                var blogCache = Sitecore.Caching.CacheManager.GetNamedInstance("BMC.Blog.Cache", 10 * 1024 * 1024, true);
                 if (blogCache != null)
                 {
                     blogCache.Clear();
@@ -102,7 +102,7 @@ namespace BMC.Feature.Blog.Events
                 }
 
                 // Clear the categories cache
-                var categoriesCache = Sitecore.Caching.CacheManager.FindCacheByName("BMC.Blog.Categories.Cache");
+                var categoriesCache = Sitecore.Caching.CacheManager.GetNamedInstance("BMC.Blog.Categories.Cache", 5 * 1024 * 1024, true);
                 if (categoriesCache != null)
                 {
                     categoriesCache.Clear();

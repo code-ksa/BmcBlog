@@ -31,7 +31,7 @@ namespace BMC.Feature.Blog.Pipelines
                 return;
 
             // Try to get cached content
-            var cachedContent = cache.GetHtml(cacheKey);
+            var cachedContent = cache.GetValue(cacheKey) as string;
             if (!string.IsNullOrEmpty(cachedContent))
             {
                 args.Writer.Write(cachedContent);
@@ -83,9 +83,9 @@ namespace BMC.Feature.Blog.Pipelines
             return $"{CacheKeyPrefix}{renderingId}_{itemId}_{language}";
         }
 
-        private Sitecore.Caching.Cache GetCache()
+        private Sitecore.Caching.ICache GetCache()
         {
-            return Sitecore.Caching.CacheManager.FindCacheByName("BMC.Blog.Cache");
+            return Sitecore.Caching.CacheManager.GetNamedInstance("BMC.Blog.Cache", 10 * 1024 * 1024, true);
         }
     }
 }
