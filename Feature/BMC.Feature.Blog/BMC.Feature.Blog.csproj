@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.ContentSearch">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.ContentSearch.dll</HintPath>
     </Reference>
@@ -70,9 +73,13 @@
   <ItemGroup>
     <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\BlogPostController.cs" />
+    <Compile Include="DependencyInjection\ServicesConfigurator.cs" />
+    <Compile Include="Events\InvalidateBlogCache.cs" />
     <Compile Include="Models\AuthorModel.cs" />
     <Compile Include="Models\BlogPostModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Pipelines\CacheBlogRendering.cs" />
+    <Compile Include="Pipelines\ResolveBlogPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BlogRepository.cs" />
   </ItemGroup>
