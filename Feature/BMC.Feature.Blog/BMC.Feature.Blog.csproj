@@ -33,12 +33,15 @@
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.ContentSearch">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.ContentSearch.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.ContentSearch.Linq">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.ContentSearch.Linq.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.Kernel.dll</HintPath>
@@ -62,6 +65,7 @@
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -87,10 +91,12 @@
     <ProjectReference Include="..\..\Foundation\BMC.Foundation.Indexing\BMC.Foundation.Indexing.csproj">
       <Project>{4c1a4b73-f52b-4cc5-b51b-fead853d7343}</Project>
       <Name>BMC.Foundation.Indexing</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\BMC.Foundation.SitecoreExtensions\BMC.Foundation.SitecoreExtensions.csproj">
       <Project>{28290fe2-e0df-4412-9275-796f12d7f4b6}</Project>
       <Name>BMC.Foundation.SitecoreExtensions</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

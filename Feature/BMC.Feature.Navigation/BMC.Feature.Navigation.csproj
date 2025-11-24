@@ -33,15 +33,18 @@
   <ItemGroup>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.Kernel.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.Mvc">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.Mvc.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\System.Web.Mvc.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,10 +64,12 @@
     <ProjectReference Include="..\..\Foundation\BMC.Foundation.Multisite\BMC.Foundation.Multisite.csproj">
       <Project>{adf63974-c5ac-42d5-8a0c-839edaa407be}</Project>
       <Name>BMC.Foundation.Multisite</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\Foundation\BMC.Foundation.SitecoreExtensions\BMC.Foundation.SitecoreExtensions.csproj">
       <Project>{28290fe2-e0df-4412-9275-796f12d7f4b6}</Project>
       <Name>BMC.Foundation.SitecoreExtensions</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

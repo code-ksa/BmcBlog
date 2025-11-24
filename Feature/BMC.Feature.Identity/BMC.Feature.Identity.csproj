@@ -33,12 +33,15 @@
   <ItemGroup>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.Kernel.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.Security.AntiCsrf">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.Security.AntiCsrf.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sitecore.XA.Feature.Security">
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\Sitecore.XA.Feature.Security.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -47,6 +50,7 @@
     <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\inetpub\wwwroot\abdo.sc\bin\System.Web.Mvc.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,6 +71,7 @@
     <ProjectReference Include="..\..\Foundation\BMC.Foundation.SitecoreExtensions\BMC.Foundation.SitecoreExtensions.csproj">
       <Project>{28290fe2-e0df-4412-9275-796f12d7f4b6}</Project>
       <Name>BMC.Foundation.SitecoreExtensions</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
