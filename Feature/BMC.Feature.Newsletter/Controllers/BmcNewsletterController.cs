@@ -4,11 +4,11 @@ using BMC.Feature.Newsletter.Services;
 
 namespace BMC.Feature.Newsletter.Controllers
 {
-    public class NewsletterController : Controller
+    public class BmcNewsletterController : Controller
     {
         private readonly NewsletterService _newsletterService;
 
-        public NewsletterController()
+        public BmcNewsletterController()
         {
             _newsletterService = new NewsletterService();
         }

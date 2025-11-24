@@ -69,11 +69,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Config\Include\Feature\Feature.Navigation.config" />
-    <None Include="Views\Navigation\Breadcrumb.cshtml" />
-    <None Include="Views\Navigation\Footer.cshtml" />
-    <None Include="Views\Navigation\Header.cshtml" />
-    <None Include="Views\Navigation\MainMenu.cshtml" />
-    <None Include="Views\Navigation\MobileMenu.cshtml" />
+    <None Include="Views\BmcNavigation\Breadcrumb.cshtml" />
+    <None Include="Views\BmcNavigation\Footer.cshtml" />
+    <None Include="Views\BmcNavigation\Header.cshtml" />
+    <None Include="Views\BmcNavigation\MainMenu.cshtml" />
+    <None Include="Views\BmcNavigation\MobileMenu.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
