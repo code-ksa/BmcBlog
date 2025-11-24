@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\BmcSearchController.cs" />
     <Compile Include="Models\SearchRequestModel.cs" />
     <Compile Include="Models\SearchResultItemModel.cs" />
     <Compile Include="Models\SearchResultModel.cs" />

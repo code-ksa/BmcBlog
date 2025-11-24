@@ -4,11 +4,11 @@ using BMC.Feature.Navigation.Repositories;
 
 namespace BMC.Feature.Navigation.Controllers
 {
-    public class NavigationController : Controller
+    public class BmcNavigationController : Controller
     {
         private readonly NavigationRepository _repository;
 
-        public NavigationController()
+        public BmcNavigationController()
         {
             _repository = new NavigationRepository();
         }

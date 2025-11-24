@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="Controllers\NavigationController.cs" />
     <Compile Include="Models\NavigationItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\NavigationRepository.cs" />
@@ -74,6 +73,9 @@
     <None Include="Views\Navigation\Header.cshtml" />
     <None Include="Views\Navigation\MainMenu.cshtml" />
     <None Include="Views\Navigation\MobileMenu.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

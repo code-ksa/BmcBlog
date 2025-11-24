@@ -38,7 +38,7 @@ namespace BMC.Project.BlogSite
             routes.MapRoute(
                 name: "Search",
                 url: "search",
-                defaults: new { controller = "Search", action = "Results" }
+                defaults: new { controller = "BmcSearch", action = "Results" }
             );
 
             // Account routes

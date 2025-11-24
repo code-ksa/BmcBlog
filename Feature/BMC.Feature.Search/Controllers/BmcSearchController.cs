@@ -4,11 +4,11 @@ using BMC.Feature.Search.Services;
 
 namespace BMC.Feature.Search.Controllers
 {
-    public class SearchController : Controller
+    public class BmcSearchController : Controller
     {
         private readonly SearchService _searchService;
 
-        public SearchController()
+        public BmcSearchController()
         {
             _searchService = new SearchService();
         }
