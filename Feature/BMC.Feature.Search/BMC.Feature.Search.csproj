@@ -83,5 +83,8 @@
   <ItemGroup>
     <Folder Include="DependencyInjection\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\BmcSearch\SearchWidget.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

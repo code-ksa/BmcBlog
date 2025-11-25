@@ -58,5 +58,10 @@ namespace BMC.Feature.Search.Controllers
 
             return Results(model);
         }
+
+        public ActionResult SearchWidget()
+        {
+            return PartialView("SearchWidget");
+        }
     }
 }

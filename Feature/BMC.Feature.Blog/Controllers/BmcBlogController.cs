@@ -1,15 +1,15 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Web.Mvc;
 using BMC.Feature.Blog.Models;
 using BMC.Feature.Blog.Repositories;
 
 namespace BMC.Feature.Blog.Controllers
 {
-    public class BlogController : Controller
+    public class BmcBlogController : Controller
     {
         private readonly BlogRepository _repository;
 
-        public BlogController(BlogRepository repository)
+        public BmcBlogController(BlogRepository repository)
         {
             _repository = repository;
         }
@@ -49,38 +49,37 @@ namespace BMC.Feature.Blog.Controllers
             return View("Index", postModels);
         }
 
+        // Widget Actions
         public ActionResult PopularPosts(int count = 5)
         {
             var posts = _repository.GetPopularPosts(count);
-            return PartialView(posts);
+            var postModels = posts.Select(p => new BlogPostModel(p)).ToList();
+
+            return PartialView("_PopularPosts", postModels);
         }
 
         public ActionResult RecentPosts(int count = 5)
         {
             var posts = _repository.GetRecentPosts(count);
-            return PartialView(posts);
+            var postModels = posts.Select(p => new BlogPostModel(p)).ToList();
+
+            return PartialView("_RecentPosts", postModels);
         }
 
         public ActionResult TagCloud()
         {
             var tags = _repository.GetAllTags();
-            return PartialView(tags);
+            var tagModels = tags.Select(t => new TagModel(t)).ToList();
+
+            return PartialView("_TagCloud", tagModels);
         }
 
         public ActionResult CategoriesList()
         {
             var categories = _repository.GetAllCategories();
-            return PartialView(categories);
-        }
+            var categoryModels = categories.Select(c => new CategoryModel(c)).ToList();
 
-        public ActionResult RelatedPosts()
-        {
-            var contextItem = Sitecore.Context.Item;
-            if (contextItem == null)
-                return Content("No context item found");
-
-            var relatedPosts = _repository.GetRelatedPosts(contextItem, 3);
-            return PartialView(relatedPosts);
+            return PartialView("_CategoriesList", categoryModels);
         }
     }
 }

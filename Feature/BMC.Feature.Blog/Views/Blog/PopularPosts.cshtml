@@ -1,0 +1,54 @@
+@model IEnumerable<Sitecore.Data.Items.Item>
+@using Sitecore.Links
+
+<div class="popular-posts-widget">
+    @if (Model != null && Model.Any())
+    {
+        <ul class="list-unstyled">
+            @foreach (var post in Model)
+            {
+                var title = post.Fields["Title"]?.Value ?? post.DisplayName;
+                var publishDate = post.Fields["Publish Date"]?.Value;
+                var url = LinkManager.GetItemUrl(post);
+                
+                <li class="mb-3">
+                    <h6 class="mb-1">
+                        <a href="@url" class="text-dark">@title</a>
+                    </h6>
+                    @if (!string.IsNullOrEmpty(publishDate))
+                    {
+                        <small class="text-muted">
+                            <i class="far fa-calendar"></i> 
+                            @DateTime.Parse(publishDate).ToString("MMM dd, yyyy")
+                        </small>
+                    }
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="text-muted">@(Sitecore.Context.Language.Name == "ar" ? "?? ???? ?????? ?????" : "No popular posts available")</p>
+    }
+</div>
+
+<style>
+    .popular-posts-widget ul li {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+    }
+
+    .popular-posts-widget ul li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .popular-posts-widget a {
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .popular-posts-widget a:hover {
+        color: #007bff !important;
+    }
+</style>

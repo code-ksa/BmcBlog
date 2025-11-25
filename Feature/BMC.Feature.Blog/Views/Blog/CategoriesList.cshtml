@@ -1,0 +1,55 @@
+@model IEnumerable<Sitecore.Data.Items.Item>
+@using Sitecore.Links
+
+<div class="categories-list-widget">
+    @if (Model != null && Model.Any())
+    {
+        <div class="list-group">
+            @foreach (var category in Model)
+            {
+                var categoryName = category.Fields["Name"]?.Value ?? category.DisplayName;
+                var description = category.Fields["Description"]?.Value;
+                var url = LinkManager.GetItemUrl(category);
+                
+                <a href="@url" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-folder mr-2"></i>
+                        <strong>@categoryName</strong>
+                        @if (!string.IsNullOrEmpty(description))
+                        {
+                            <br />
+                            <small class="text-muted">@description</small>
+                        }
+                    </div>
+                    <i class="fas fa-chevron-@(Sitecore.Context.Language.Name == "ar" ? "left" : "right")"></i>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">@(Sitecore.Context.Language.Name == "ar" ? "?? ???? ???????" : "No categories available")</p>
+    }
+</div>
+
+<style>
+    .categories-list-widget .list-group-item {
+        border-radius: 0.25rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .categories-list-widget .list-group-item:hover {
+        background-color: #007bff;
+        color: white;
+        transform: translateX(@(Sitecore.Context.Language.Name == "ar" ? "-5px" : "5px"));
+    }
+
+    .categories-list-widget .list-group-item:hover .text-muted {
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .categories-list-widget .list-group-item:hover i {
+        color: white;
+    }
+</style>

@@ -1,0 +1,100 @@
+@model IEnumerable<Sitecore.Data.Items.Item>
+@using Sitecore.Links
+@using Sitecore.Resources.Media
+
+<div class="related-posts-widget">
+    @if (Model != null && Model.Any())
+    {
+        <h4 class="mb-4">
+            <i class="fas fa-link"></i> 
+            @(Sitecore.Context.Language.Name == "ar" ? "?????? ??? ???" : "Related Posts")
+        </h4>
+        <div class="row">
+            @foreach (var post in Model.Take(3))
+            {
+                var title = post.Fields["Title"]?.Value ?? post.DisplayName;
+                var summary = post.Fields["Short Description"]?.Value;
+                var publishDate = post.Fields["Publish Date"]?.Value;
+                var url = LinkManager.GetItemUrl(post);
+                var featuredImageField = post.Fields["Featured Image"];
+                string imageUrl = null;
+
+                if (featuredImageField != null && !string.IsNullOrEmpty(featuredImageField.Value))
+                {
+                    var mediaItem = post.Database.GetItem(featuredImageField.Value);
+                    if (mediaItem != null)
+                    {
+                        var mediaUrlOptions = new MediaUrlOptions { AlwaysIncludeServerUrl = false };
+                        imageUrl = MediaManager.GetMediaUrl(mediaItem, mediaUrlOptions);
+                    }
+                }
+                
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm related-post-card">
+                        @if (!string.IsNullOrEmpty(imageUrl))
+                        {
+                            <img src="@imageUrl" class="card-img-top" alt="@title" />
+                        }
+                        else
+                        {
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <i class="fas fa-image fa-3x text-white"></i>
+                            </div>
+                        }
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <a href="@url" class="text-dark">@title</a>
+                            </h6>
+                            @if (!string.IsNullOrEmpty(summary))
+                            {
+                                <p class="card-text small text-muted">
+                                    @(summary.Length > 80 ? summary.Substring(0, 80) + "..." : summary)
+                                </p>
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(publishDate))
+                        {
+                            <div class="card-footer bg-transparent small text-muted">
+                                <i class="far fa-calendar"></i> 
+                                @DateTime.Parse(publishDate).ToString("MMM dd, yyyy")
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> 
+            @(Sitecore.Context.Language.Name == "ar" ? "?? ???? ?????? ??? ???" : "No related posts available")
+        </div>
+    }
+</div>
+
+<style>
+    .related-post-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .related-post-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .related-post-card .card-img-top {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .related-post-card .card-title a {
+        text-decoration: none;
+        transition: color 0.3s ease;
+        font-weight: 600;
+    }
+
+    .related-post-card .card-title a:hover {
+        color: #007bff !important;
+    }
+</style>

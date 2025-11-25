@@ -82,6 +82,9 @@
     <Compile Include="Models\AuthorModel.cs" />
     <Compile Include="Models\BlogPostModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
+    <Compile Include="Models\PodcastEpisodeModel.cs" />
+    <Compile Include="Models\SocialSharingModel.cs" />
+    <Compile Include="Models\TagModel.cs" />
     <Compile Include="Pipelines\CacheBlogRendering.cs" />
     <Compile Include="Pipelines\ResolveBlogPost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -102,6 +105,13 @@
   <ItemGroup>
     <Content Include="App_Config\Include\Feature\Feature.Blog.config" />
     <Content Include="Views\Blog\_PostCard.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\Blog\CategoriesList.cshtml" />
+    <None Include="Views\Blog\PopularPosts.cshtml" />
+    <None Include="Views\Blog\RecentPosts.cshtml" />
+    <None Include="Views\Blog\RelatedPosts.cshtml" />
+    <None Include="Views\Blog\TagCloud.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

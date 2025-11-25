@@ -1,0 +1,66 @@
+@using Sitecore.Mvc
+@{
+    var currentLanguage = Sitecore.Context.Language.Name;
+    var placeholder = currentLanguage == "ar" ? "???? ?? ???????..." : "Search the blog...";
+    var searchButtonText = currentLanguage == "ar" ? "???" : "Search";
+}
+
+<div class="search-widget card">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-search"></i>
+            @(currentLanguage == "ar" ? "?????" : "Search")
+        </h5>
+    </div>
+    <div class="card-body">
+        <form action="/search/results" method="get" class="search-form">
+            <div class="input-group">
+                <input type="text" 
+                       name="query" 
+                       class="form-control" 
+                       placeholder="@placeholder"
+                       aria-label="Search"
+                       required />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">
+                        <i class="fas fa-search"></i>
+                        <span class="d-none d-sm-inline ml-1">@searchButtonText</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="mt-3">
+            <small class="text-muted">
+                <i class="fas fa-lightbulb"></i>
+                @(currentLanguage == "ar" ? "?????: ?????? ????? ??????? ????? ?????? ??? ????? ????" : "Tip: Use specific keywords for better results")
+            </small>
+        </div>
+    </div>
+</div>
+
+<style>
+    .search-widget .search-form .input-group {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 0.25rem;
+    }
+
+    .search-widget .search-form input {
+        border: 1px solid #ced4da;
+    }
+
+    .search-widget .search-form input:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .search-widget .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .search-widget .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>

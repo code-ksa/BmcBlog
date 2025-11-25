@@ -1,0 +1,45 @@
+@model IEnumerable<Sitecore.Data.Items.Item>
+@using Sitecore.Links
+
+<div class="tag-cloud-widget">
+    @if (Model != null && Model.Any())
+    {
+        <div class="tags-wrapper">
+            @foreach (var tag in Model)
+            {
+                var tagName = tag.Fields["Name"]?.Value ?? tag.DisplayName;
+                var url = LinkManager.GetItemUrl(tag);
+                
+                <a href="@url" class="badge badge-primary tag-badge">
+                    @tagName
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">@(Sitecore.Context.Language.Name == "ar" ? "?? ???? ????" : "No tags available")</p>
+    }
+</div>
+
+<style>
+    .tag-cloud-widget .tags-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .tag-cloud-widget .tag-badge {
+        font-size: 0.875rem;
+        font-weight: normal;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .tag-cloud-widget .tag-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+</style>
