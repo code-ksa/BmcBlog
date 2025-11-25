@@ -59,7 +59,7 @@
     <Compile Include="SearchModels\BlogSearchResultItem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Foundation\Foundation.Indexing.config" />
+    <Content Include="App_Config\Include\Foundation\Foundation.Indexing.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

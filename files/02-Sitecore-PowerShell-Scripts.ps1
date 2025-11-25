@@ -176,133 +176,418 @@ Write-Host "Renderings creation completed!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Cyan
 
 # ====================================================================
-# SCRIPT 3: ربط Layout بـ Home Page
-# ====================================================================
-# الغرض: ربط Blog Layout بصفحة Home
-# متى نستخدمه: بعد إنشاء Layout و Renderings
+# SCRIPT 3: Assign Layout to Pages (Fixed & Optimized)
 # ====================================================================
 
 Write-Host ""
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "STEP 3: Assigning Layout to Home Page" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Yellow
+Write-Host "SCRIPT 3: Assigning Layout to Pages" -ForegroundColor Yellow
+Write-Host "========================================" -ForegroundColor Yellow
 Write-Host ""
 
-# المسارات
-$homePagePath = "/sitecore/content/BMC/BmcBlog/Home"
-$layoutItemPath = "/sitecore/layout/Layouts/BMC/Blog Layout"
+# Configuration
+$layoutPath = "/sitecore/layout/Layouts/BMC/Blog Layout"
+$sitePath = "/sitecore/content/BMC/BmcBlog"
 
-# الحصول على الصفحة
-$homePage = Get-Item -Path "master:$homePagePath" -ErrorAction SilentlyContinue
-
-if (-not $homePage) {
-    Write-Host "[✗] Home page not found at: $homePagePath" -ForegroundColor Red
-    exit
-}
-
-# الحصول على Layout
-$layoutItem = Get-Item -Path "master:$layoutItemPath" -ErrorAction SilentlyContinue
-
+# Check Layout
+Write-Host "[1/4] Checking requirements..." -ForegroundColor Cyan
+$layoutItem = Get-Item -Path "master:$layoutPath" -ErrorAction SilentlyContinue
 if (-not $layoutItem) {
-    Write-Host "[✗] Layout not found. Please run SCRIPT 1 first!" -ForegroundColor Red
+    Write-Host "[✗] Layout not found! Run SCRIPT 1 first." -ForegroundColor Red
+    exit
+}
+Write-Host "    [✓] Layout found: $($layoutItem.ID)" -ForegroundColor Green
+
+# Check Device
+$defaultDevice = Get-Item -Path "master:/sitecore/layout/Devices/Default" -ErrorAction SilentlyContinue
+if (-not $defaultDevice) {
+    Write-Host "[✗] Default device not found!" -ForegroundColor Red
+    exit
+}
+Write-Host "    [✓] Default device found" -ForegroundColor Green
+
+# Check Site
+$siteRoot = Get-Item -Path "master:$sitePath" -ErrorAction SilentlyContinue
+if (-not $siteRoot) {
+    Write-Host "[✗] Site root not found!" -ForegroundColor Red
+    exit
+}
+Write-Host "    [✓] Site root found" -ForegroundColor Green
+Write-Host ""
+
+# Get items to process
+Write-Host "[2/4] Select pages:" -ForegroundColor Cyan
+Write-Host "    1. Home page only" -ForegroundColor White
+Write-Host "    2. Home + Direct children" -ForegroundColor White
+Write-Host "    3. All pages (Recommended)" -ForegroundColor Green
+Write-Host "    4. Custom path" -ForegroundColor White
+Write-Host ""
+$choice = Read-Host "Enter choice (1-4)"
+
+$itemsToProcess = @()
+
+switch ($choice) {
+    "1" {
+        $itemsToProcess = @(Get-Item -Path "master:$sitePath")
+    }
+    "2" {
+        $itemsToProcess = @(Get-Item -Path "master:$sitePath")
+        $itemsToProcess += Get-ChildItem -Path "master:$sitePath"
+    }
+    "3" {
+        Write-Host "    [+] Getting all items..." -ForegroundColor Yellow
+        $itemsToProcess = @(Get-Item -Path "master:$sitePath")
+        $itemsToProcess += Get-ChildItem -Path "master:$sitePath" -Recurse
+    }
+    "4" {
+        $customPath = Read-Host "    Enter path"
+        $recurse = Read-Host "    Include children? (y/n)"
+        
+        if ($recurse -eq 'y') {
+            $itemsToProcess = @(Get-Item -Path "master:$customPath" -ErrorAction SilentlyContinue)
+            $itemsToProcess += Get-ChildItem -Path "master:$customPath" -Recurse -ErrorAction SilentlyContinue
+        } else {
+            $itemsToProcess = @(Get-Item -Path "master:$customPath" -ErrorAction SilentlyContinue)
+        }
+    }
+    default {
+        Write-Host "[✗] Invalid choice!" -ForegroundColor Red
+        exit
+    }
+}
+
+$itemsToProcess = $itemsToProcess | Where-Object { $_ -ne $null }
+
+if ($itemsToProcess.Count -eq 0) {
+    Write-Host "[✗] No items found!" -ForegroundColor Red
     exit
 }
 
-Write-Host "[+] Assigning layout to Home page..." -ForegroundColor Yellow
-
-# الحصول على shared layout field
-$sharedLayoutField = $homePage.Fields["__Renderings"]
-$finalLayoutField = $homePage.Fields["__Final Renderings"]
-
-# إنشاء Layout definition
-$layoutDefinition = New-Object Sitecore.Data.Fields.LayoutField $sharedLayoutField
-
-# إنشاء Device definition
-$deviceItem = Get-Item -Path "master:/sitecore/layout/Devices/Default"
-$device = $layoutDefinition.GetDefinition().GetDevice($deviceItem.ID.ToString())
-
-if ($device -eq $null) {
-    $device = New-Object Sitecore.Data.Fields.DeviceDefinition
-    $device.ID = $deviceItem.ID.ToString()
-}
-
-# تعيين Layout
-$device.Layout = $layoutItem.ID.ToString()
-
-# حفظ التعديلات
-$homePage.Editing.BeginEdit()
-try {
-    $layoutDefinition.Value = $device.ToString()
-    $homePage.Editing.EndEdit() | Out-Null
-    Write-Host "[✓] Layout assigned successfully!" -ForegroundColor Green
-} catch {
-    $homePage.Editing.CancelEdit()
-    Write-Host "[✗] Error: $_" -ForegroundColor Red
-}
-
-Write-Host ""
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Layout assignment completed!" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Cyan
-
-# ====================================================================
-# SCRIPT 4: إضافة Renderings إلى Home Page
-# ====================================================================
-# الغرض: إضافة Header, Footer, Breadcrumb إلى صفحة Home
-# متى نستخدمه: بعد ربط Layout
-# ====================================================================
-
-Write-Host ""
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "STEP 4: Adding Renderings to Home Page" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "    [✓] Found $($itemsToProcess.Count) items" -ForegroundColor Green
 Write-Host ""
 
-# المسارات
-$homePagePath = "/sitecore/content/BMC/BmcBlog/Home"
-$renderingsBasePath = "/sitecore/layout/Renderings/BMC"
+# Handle existing
+Write-Host "[3/4] Handle existing layouts:" -ForegroundColor Cyan
+Write-Host "    1. Skip items with layout" -ForegroundColor White
+Write-Host "    2. Update/Replace (Recommended)" -ForegroundColor Green
+Write-Host "    3. Remove old then add new" -ForegroundColor White
+Write-Host ""
+$handleExisting = Read-Host "Enter choice (1-3)"
+Write-Host ""
 
-# الحصول على الصفحة
-$homePage = Get-Item -Path "master:$homePagePath"
+# Process items
+Write-Host "[4/4] Processing items..." -ForegroundColor Cyan
+Write-Host ""
 
-# تعريف الـ Renderings المطلوب إضافتها مع Placeholders
-$renderingsToAdd = @(
-    @{
-        Name = "Header"
-        Placeholder = "header"
-    },
-    @{
-        Name = "Breadcrumb"
-        Placeholder = "breadcrumb"
-    },
-    @{
-        Name = "Footer"
-        Placeholder = "footer"
-    }
-)
+$skipTemplates = @("Common/Folder", "System/Layout/Device", "System/Dictionary/Dictionary Domain")
+$skipNames = @("Media", "Data", "Presentation", "Settings", "BmcBlog Dictionary")
 
-Write-Host "[+] Adding renderings to Home page..." -ForegroundColor Yellow
+$processedCount = 0
+$skippedCount = 0
+$successCount = 0
+$errorCount = 0
+$updatedCount = 0
 
-foreach ($renderingInfo in $renderingsToAdd) {
-    $renderingPath = "$renderingsBasePath/$($renderingInfo.Name)"
-    $rendering = Get-Item -Path "master:$renderingPath" -ErrorAction SilentlyContinue
+foreach ($item in $itemsToProcess) {
+    $processedCount++
     
-    if (-not $rendering) {
-        Write-Host "[✗] Rendering not found: $($renderingInfo.Name)" -ForegroundColor Red
+    if ($processedCount % 10 -eq 0) {
+        Write-Host "    Progress: $processedCount / $($itemsToProcess.Count)" -ForegroundColor Gray
+    }
+    
+    # Skip unwanted items
+    $shouldSkip = $false
+    
+    foreach ($skipTemplate in $skipTemplates) {
+        if ($item.TemplateName -like "*$skipTemplate*") {
+            $shouldSkip = $true
+            break
+        }
+    }
+    
+    if ($item.Name -in $skipNames) {
+        $shouldSkip = $true
+    }
+    
+    if ($shouldSkip) {
+        $skippedCount++
         continue
     }
     
-    Write-Host "[+] Adding $($renderingInfo.Name) to placeholder: $($renderingInfo.Placeholder)..." -ForegroundColor Yellow
+    # Check current layout
+    $currentLayout = $item | Get-Layout -Device $defaultDevice -ErrorAction SilentlyContinue
+    $hasLayout = ($currentLayout -ne $null)
     
-    # إضافة Rendering باستخدام Add-Rendering cmdlet
-    Add-Rendering -Item $homePage -PlaceHolder $renderingInfo.Placeholder -Rendering $rendering -Parameter @{} | Out-Null
+    $shouldProcess = $false
     
-    Write-Host "[✓] $($renderingInfo.Name) added successfully" -ForegroundColor Green
+    switch ($handleExisting) {
+        "1" {
+            if (-not $hasLayout) {
+                $shouldProcess = $true
+            } else {
+                $skippedCount++
+            }
+        }
+        "2" {
+            $shouldProcess = $true
+        }
+        "3" {
+            if ($hasLayout) {
+                try {
+                    $item.Editing.BeginEdit()
+                    $item["__Renderings"] = ""
+                    $item.Editing.EndEdit() | Out-Null
+                } catch {
+                    if ($item.Editing.IsEditing) {
+                        $item.Editing.CancelEdit()
+                    }
+                }
+            }
+            $shouldProcess = $true
+        }
+    }
+    
+    if ($shouldProcess) {
+        try {
+            # Use SPE cmdlet
+            $item | Set-Layout -Device $defaultDevice -Layout $layoutItem
+            
+            if ($hasLayout) {
+                $updatedCount++
+            } else {
+                $successCount++
+            }
+        } catch {
+            # Fallback to XML method
+            try {
+                $item.Editing.BeginEdit()
+                $layoutXml = "<r xmlns:xsd=`"http://www.w3.org/2001/XMLSchema`"><d id=`"{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}`" l=`"$($layoutItem.ID)`" /></r>"
+                $item["__Renderings"] = $layoutXml
+                $item.Editing.EndEdit() | Out-Null
+                
+                if ($hasLayout) {
+                    $updatedCount++
+                } else {
+                    $successCount++
+                }
+            } catch {
+                if ($item.Editing.IsEditing) {
+                    $item.Editing.CancelEdit()
+                }
+                $errorCount++
+            }
+        }
+    }
+}
+
+# Summary
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Layout Assignment Summary" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Total Items Processed: $processedCount" -ForegroundColor White
+Write-Host "New Layouts Assigned: $successCount" -ForegroundColor Green
+Write-Host "Layouts Updated: $updatedCount" -ForegroundColor Yellow
+Write-Host "Skipped: $skippedCount" -ForegroundColor DarkGray
+Write-Host "Errors: $errorCount" -ForegroundColor Red
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+
+if ($successCount -gt 0 -or $updatedCount -gt 0) {
+    Write-Host "[✓] Layout assignment completed!" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Next: Run SCRIPT 4 to add Renderings" -ForegroundColor Cyan
+} else {
+    Write-Host "[!] No layouts were assigned." -ForegroundColor Yellow
 }
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "Renderings added successfully!" -ForegroundColor Green
+Write-Host "SCRIPT 3 Completed!" -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Cyan
+# ====================================================================
+# SCRIPT 4: Add Renderings to Pages (Fixed & Optimized)
+# ====================================================================
+
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Yellow
+Write-Host "SCRIPT 4: Adding Renderings to Pages" -ForegroundColor Yellow
+Write-Host "========================================" -ForegroundColor Yellow
+Write-Host ""
+
+# Configuration
+$renderingsBasePath = "/sitecore/layout/Renderings/BMC"
+$sitePath = "/sitecore/content/BMC/BmcBlog"
+
+# Renderings to add
+$renderingsConfig = @(
+    @{Name = "Header"; Placeholder = "header"},
+    @{Name = "Breadcrumb"; Placeholder = "breadcrumb"},
+    @{Name = "Footer"; Placeholder = "footer"}
+)
+
+# Check requirements
+Write-Host "[1/3] Checking requirements..." -ForegroundColor Cyan
+
+$missingRenderings = @()
+foreach ($config in $renderingsConfig) {
+    $rendering = Get-Item -Path "master:$renderingsBasePath/$($config.Name)" -ErrorAction SilentlyContinue
+    if (-not $rendering) {
+        $missingRenderings += $config.Name
+    }
+}
+
+if ($missingRenderings.Count -gt 0) {
+    Write-Host "[✗] Missing renderings: $($missingRenderings -join ', ')" -ForegroundColor Red
+    Write-Host "    Run SCRIPT 2 first!" -ForegroundColor Red
+    exit
+}
+Write-Host "    [✓] All renderings found" -ForegroundColor Green
+
+$defaultDevice = Get-Item -Path "master:/sitecore/layout/Devices/Default" -ErrorAction SilentlyContinue
+if (-not $defaultDevice) {
+    Write-Host "[✗] Default device not found!" -ForegroundColor Red
+    exit
+}
+Write-Host "    [✓] Default device found" -ForegroundColor Green
+Write-Host ""
+
+# Get pages with layout
+Write-Host "[2/3] Finding pages with layout..." -ForegroundColor Cyan
+
+$allItems = Get-ChildItem -Path "master:$sitePath" -Recurse -ErrorAction SilentlyContinue
+$pagesWithLayout = @()
+
+foreach ($item in $allItems) {
+    $layoutField = $item.Fields["__Renderings"]
+    if ($layoutField -ne $null -and ![string]::IsNullOrEmpty($layoutField.Value)) {
+        $pagesWithLayout += $item
+    }
+}
+
+Write-Host "    [✓] Found $($pagesWithLayout.Count) pages with layout" -ForegroundColor Green
+Write-Host ""
+
+if ($pagesWithLayout.Count -eq 0) {
+    Write-Host "[!] No pages with layout found. Run SCRIPT 3 first!" -ForegroundColor Yellow
+    exit
+}
+
+# Process pages
+Write-Host "[3/3] Adding renderings..." -ForegroundColor Cyan
+Write-Host ""
+
+$stats = @{
+    TotalPages = $pagesWithLayout.Count
+    TotalOperations = 0
+    SuccessCount = 0
+    SkipCount = 0
+    ErrorCount = 0
+}
+
+$skipNames = @("Media", "Data", "Presentation", "Settings", "BmcBlog Dictionary")
+
+foreach ($page in $pagesWithLayout) {
+    # Skip system items
+    if ($page.Name -in $skipNames) {
+        continue
+    }
+    
+    if ($stats.TotalOperations % 30 -eq 0 -and $stats.TotalOperations -gt 0) {
+        Write-Host "    Progress: $($stats.TotalOperations) operations completed" -ForegroundColor Gray
+    }
+    
+    # Get current layout XML
+    $layoutField = $page.Fields["__Renderings"]
+    if ($layoutField -eq $null -or [string]::IsNullOrEmpty($layoutField.Value)) {
+        continue
+    }
+    
+    try {
+        [xml]$layoutXml = $layoutField.Value
+    } catch {
+        Write-Host "    [!] Skipping $($page.Name) - invalid layout XML" -ForegroundColor Yellow
+        continue
+    }
+    
+    # Find device node
+    $deviceNode = $layoutXml.SelectSingleNode("//d[@id='$($defaultDevice.ID)']")
+    if ($deviceNode -eq $null) {
+        continue
+    }
+    
+    $modified = $false
+    
+    # Add each rendering
+    foreach ($config in $renderingsConfig) {
+        $stats.TotalOperations++
+        
+        $rendering = Get-Item -Path "master:$renderingsBasePath/$($config.Name)" -ErrorAction SilentlyContinue
+        if (-not $rendering) {
+            continue
+        }
+        
+        # Check if rendering already exists
+        $existingRendering = $deviceNode.SelectSingleNode("r[@id='$($rendering.ID)']")
+        if ($existingRendering -ne $null) {
+            $stats.SkipCount++
+            continue
+        }
+        
+        # Create new rendering node
+        $renderingNode = $layoutXml.CreateElement("r")
+        $renderingNode.SetAttribute("id", $rendering.ID.ToString())
+        $renderingNode.SetAttribute("ph", $config.Placeholder)
+        $renderingNode.SetAttribute("uid", [Guid]::NewGuid().ToString())
+        
+        # Add to device
+        $deviceNode.AppendChild($renderingNode) | Out-Null
+        $modified = $true
+        $stats.SuccessCount++
+    }
+    
+    # Save if modified
+    if ($modified) {
+        try {
+            $page.Editing.BeginEdit()
+            $page.Fields["__Renderings"].Value = $layoutXml.OuterXml
+            $page.Editing.EndEdit() | Out-Null
+        } catch {
+            if ($page.Editing.IsEditing) {
+                $page.Editing.CancelEdit()
+            }
+            $stats.ErrorCount++
+        }
+    }
+}
+
+# Summary
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Rendering Addition Summary" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "Total Pages: $($stats.TotalPages)" -ForegroundColor White
+Write-Host "Total Operations: $($stats.TotalOperations)" -ForegroundColor White
+Write-Host "Renderings Added: $($stats.SuccessCount)" -ForegroundColor Green
+Write-Host "Skipped (already exists): $($stats.SkipCount)" -ForegroundColor Yellow
+Write-Host "Errors: $($stats.ErrorCount)" -ForegroundColor Red
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+
+if ($stats.SuccessCount -gt 0) {
+    Write-Host "[✓] Renderings added successfully!" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Next: Run SCRIPT 5 to publish changes" -ForegroundColor Cyan
+} else {
+    Write-Host "[!] No new renderings were added." -ForegroundColor Yellow
+    Write-Host "    Possible reasons:" -ForegroundColor Cyan
+    Write-Host "    - All pages already have these renderings" -ForegroundColor White
+    Write-Host "    - Pages don't have layout assigned" -ForegroundColor White
+}
+
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "SCRIPT 4 Completed!" -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Cyan
 
 # ====================================================================

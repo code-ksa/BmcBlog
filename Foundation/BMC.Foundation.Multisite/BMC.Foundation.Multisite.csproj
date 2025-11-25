@@ -55,7 +55,7 @@
     <Compile Include="Providers\SiteResolver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Foundation\Foundation.Multisite.config" />
+    <Content Include="App_Config\Include\Foundation\Foundation.Multisite.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

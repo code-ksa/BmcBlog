@@ -66,9 +66,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Feature\Feature.Hero.config" />
-    <None Include="Views\HeroSlider\Index.cshtml" />
-    <None Include="Views\Hero\_HeroSlide.cshtml" />
+    <Content Include="App_Config\Include\Feature\Feature.Hero.config" />
+    <Content Include="Views\HeroSlider\Index.cshtml" />
+    <Content Include="Views\Hero\_HeroSlide.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyInjection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

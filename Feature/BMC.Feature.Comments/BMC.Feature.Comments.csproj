@@ -74,9 +74,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Feature\Feature.Comments.config" />
-    <None Include="Views\Comments\Add.cshtml" />
-    <None Include="Views\Comments\List.cshtml" />
+    <Content Include="App_Config\Include\Feature\Feature.Comments.config" />
+    <Content Include="Views\Comments\Add.cshtml" />
+    <Content Include="Views\Comments\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyInjection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

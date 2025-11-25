@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,12 +52,21 @@
   <ItemGroup>
     <Compile Include="Constants\Templates.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Helpers\LayoutItemManager.cs" />
     <Compile Include="Helpers\LinkHelper.cs" />
+    <Compile Include="Helpers\PresentationManager.cs" />
+    <Compile Include="Helpers\RenderingItemManager.cs" />
+    <Compile Include="Helpers\TemplateManager.cs" />
+    <Compile Include="Infrastructure\SitecoreInitializer.cs" />
     <Compile Include="Pipelines\CustomResolveRenderingDatasource.cs" />
+    <Compile Include="Pipelines\InitializeBlogProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Foundation\Foundation.SitecoreExtensions.config" />
+    <Content Include="App_Config\Include\Foundation\Foundation.SitecoreExtensions.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Config\Include\Foundation\Foundation.SitecoreExtensions.Blog.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

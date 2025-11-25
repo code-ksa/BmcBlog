@@ -54,7 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Controllers\BmcNavigationController.cs" />
     <Compile Include="Models\NavigationItemModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,13 +72,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Feature\Feature.Navigation.config" />
-    <None Include="Views\BmcNavigation\Breadcrumb.cshtml" />
-    <None Include="Views\BmcNavigation\Footer.cshtml" />
-    <None Include="Views\BmcNavigation\Header.cshtml" />
-    <None Include="Views\BmcNavigation\MainMenu.cshtml" />
-    <None Include="Views\BmcNavigation\MobileMenu.cshtml" />
+    <Content Include="App_Config\Include\Feature\Feature.Navigation.config" />
+    <Content Include="Views\BmcNavigation\Breadcrumb.cshtml" />
+    <Content Include="Views\BmcNavigation\Footer.cshtml" />
+    <Content Include="Views\BmcNavigation\Header.cshtml" />
+    <Content Include="Views\BmcNavigation\MainMenu.cshtml" />
+    <Content Include="Views\BmcNavigation\MobileMenu.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DependencyInjection\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

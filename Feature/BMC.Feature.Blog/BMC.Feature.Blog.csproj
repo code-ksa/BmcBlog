@@ -100,8 +100,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Feature\Feature.Blog.config" />
-    <None Include="Views\Blog\_PostCard.cshtml" />
+    <Content Include="App_Config\Include\Feature\Feature.Blog.config" />
+    <Content Include="Views\Blog\_PostCard.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

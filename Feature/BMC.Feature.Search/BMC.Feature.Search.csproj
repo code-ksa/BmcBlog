@@ -77,8 +77,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Feature\Feature.Search.Indexes.config" />
-    <None Include="Views\Search\_SearchAutocomplete.cshtml" />
+    <Content Include="App_Config\Include\Feature\Feature.Search.Indexes.config" />
+    <Content Include="Views\Search\_SearchAutocomplete.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyInjection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

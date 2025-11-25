@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Controllers\BmcNewsletterController.cs" />
     <Compile Include="Models\NewsletterSubscriptionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,8 +69,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Config\Include\Feature\Feature.Newsletter.config" />
-    <None Include="Views\BmcNewsletter\Subscribe.cshtml" />
+    <Content Include="App_Config\Include\Feature\Feature.Newsletter.config" />
+    <Content Include="Views\BmcNewsletter\Subscribe.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DependencyInjection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
